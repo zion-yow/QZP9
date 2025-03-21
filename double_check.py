@@ -14,62 +14,6 @@ from filelock import FileLock, Timeout
 import time
 import random
 
-FLOW_TYPE_DCT = {
-    'Random': 5,
-    'SystemWin': 10,
-    'SystemLose': 11,
-    'Break_Monthly_RTP_CAP': 1,
-    'Break_Monthly_Loss_CAP': 12,
-    'Break_Daily_Loss_CAP': 3
-}
-
-RANDOM_RTP_RANGE_DCT = {
-    0.02:10,
-    0.03:9,
-    0.04:8,
-    0.05:7,
-    0.06:6,
-    0.07:5,
-    0.08:4,
-    0.09:3,
-    0.10:2,
-    0.11:1,
-    0.12:0,
-    0.13:-1,
-    0.14:-2,
-    0.15:-3,
-    0.16:-4,
-    0.17:-5,
-    0.18:-6,
-    0.19:-7,
-    0.20:-8,
-    0.21:-9,
-    0.22:-10
-}
-
-SYS_LOSE_RTP_RANGE_DCT = {
-    0.22:10,
-    0.23:9,
-    0.24:8,
-    0.25:7,
-    0.26:6,
-    0.27:5,
-    0.28:4,
-    0.29:3,
-    0.30:2,
-    0.31:1,
-    0.32:0,
-    0.33:-1,
-    0.34:-2,
-    0.35:-3,
-    0.36:-4,
-    0.37:-5,
-    0.38:-6,
-    0.39:-7,
-    0.40:-8,
-    0.41:-9,
-    0.42:-10
-}
 
 def format_number(value):
     """数字格式化处理器"""
@@ -350,25 +294,25 @@ def single_double_check(log_file_path:str, log_name:str, parameters:dict, order:
     
     # -----------------step 1: 填寫測試工具參數------------------------
     
-    os.makedirs(f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/config_game', exist_ok=True)
+    os.makedirs(f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/config_game', exist_ok=True)
 
     lock_path = log_file_path + ".lock"
     lock = FileLock(lock_path, timeout=15)
     try:
         with lock:
             # 設置bet_strategy參數
-            bet_strategy_parameters = load_yaml('F:/projects/TTZ/Validation/' + 'config_game/bet_strategy.yaml')
+            bet_strategy_parameters = load_yaml('F:/projects/QZP9/Validation/' + 'config_game/bet_strategy.yaml')
             bet_strategy_parameters["fixed_top_door"] = int(parameters["region_bet"][0])
             bet_strategy_parameters["fixed_sky_door"] = int(parameters["region_bet"][1])
             bet_strategy_parameters["fixed_bottom_door"] = int(parameters["region_bet"][2])
             bet_strategy_parameters["fixed_top_corner"] = int(parameters["region_bet"][3])
             bet_strategy_parameters["fixed_bridge"] = int(parameters["region_bet"][4])
             bet_strategy_parameters["fixed_bottom_corner"] = int(parameters["region_bet"][5])
-            save_yaml(bet_strategy_parameters, f'F:/projects/TTZ/Validation/' + 'config_game/bet_strategy.yaml')
-            save_yaml(bet_strategy_parameters, f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/' + 'config_game/bet_strategy.yaml')
+            save_yaml(bet_strategy_parameters, f'F:/projects/QZP9/Validation/' + 'config_game/bet_strategy.yaml')
+            save_yaml(bet_strategy_parameters, f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/' + 'config_game/bet_strategy.yaml')
 
             # 設置game_init參數（回顧過去對局）
-            game_init_parameters = load_yaml('F:/projects/TTZ/Validation/' + 'config_game/game_init.yaml')
+            game_init_parameters = load_yaml('F:/projects/QZP9/Validation/' + 'config_game/game_init.yaml')
             game_init_parameters["top_door_continue_count"] = abs(int(parameters["consecutive_above_door"]))
             game_init_parameters["top_door_continue_type"] = 1 if int(parameters["consecutive_above_door"]) > 0 else 2
             game_init_parameters["sky_door_continue_count"] = abs(int(parameters["consecutive_heaven_door"]))
@@ -384,11 +328,11 @@ def single_double_check(log_file_path:str, log_name:str, parameters:dict, order:
             game_init_parameters["review_round_count_6"] = int(parameters["pass_n_turns_distribution"][5])
             game_init_parameters["review_round_count_7"] = int(parameters["pass_n_turns_distribution"][6])
             game_init_parameters["review_round_count_8"] = int(parameters["pass_n_turns_distribution"][7])
-            save_yaml(game_init_parameters, f'F:/projects/TTZ/Validation/' + 'config_game/game_init.yaml')
-            save_yaml(game_init_parameters, f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/' + 'config_game/game_init.yaml')
+            save_yaml(game_init_parameters, f'F:/projects/QZP9/Validation/' + 'config_game/game_init.yaml')
+            save_yaml(game_init_parameters, f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/' + 'config_game/game_init.yaml')
 
             # 設置rtp_valid_tool_setting參數
-            rtp_valid_tool_setting_parameters = load_yaml('F:/projects/TTZ/Validation/' + 'config_game/rtp_valid_tool_setting.yaml')
+            rtp_valid_tool_setting_parameters = load_yaml('F:/projects/QZP9/Validation/' + 'config_game/rtp_valid_tool_setting.yaml')
             rtp_valid_tool_setting_parameters["flow_type"] = FLOW_TYPE_DCT[parameters["process_type"]]
             rtp_valid_tool_setting_parameters["monthly_bet_amount"] = int(parameters["monthly_total_bet"])
             rtp_valid_tool_setting_parameters["monthly_pay_amount"] = int(parameters["monthly_total_pay"])
@@ -404,30 +348,30 @@ def single_double_check(log_file_path:str, log_name:str, parameters:dict, order:
             rtp_valid_tool_setting_parameters["daily_loss_limit"] = int(parameters["daily_loss_cap"])
             rtp_valid_tool_setting_parameters["system_expect_rtp"] = int(parameters["expected_RTP"])
             rtp_valid_tool_setting_parameters["system_rtp_range_no"] = RANDOM_RTP_RANGE_DCT[parameters["RTPfactor_square"]] if rtp_valid_tool_setting_parameters["flow_type"] == 5 else SYS_LOSE_RTP_RANGE_DCT[parameters["RTPfactor_square"]]
-            save_yaml(rtp_valid_tool_setting_parameters, f'F:/projects/TTZ/Validation/' + 'config_game/rtp_valid_tool_setting.yaml')
-            save_yaml(rtp_valid_tool_setting_parameters, f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/' + 'config_game/rtp_valid_tool_setting.yaml')
+            save_yaml(rtp_valid_tool_setting_parameters, f'F:/projects/QZP9/Validation/' + 'config_game/rtp_valid_tool_setting.yaml')
+            save_yaml(rtp_valid_tool_setting_parameters, f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/' + 'config_game/rtp_valid_tool_setting.yaml')
 
             # 設置tool_setting參數
-            tool_setting_parameters = load_yaml('F:/projects/TTZ/Validation/' + 'config_game/tool_setting.yaml')
+            tool_setting_parameters = load_yaml('F:/projects/QZP9/Validation/' + 'config_game/tool_setting.yaml')
             tool_setting_parameters["group_id"] = log_name[:-4]
             tool_setting_parameters["round_count"] = 3
-            save_yaml(tool_setting_parameters, f'F:/projects/TTZ/Validation/' + 'config_game/tool_setting.yaml')
-            save_yaml(tool_setting_parameters, f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/' + 'config_game/tool_setting.yaml')
+            save_yaml(tool_setting_parameters, f'F:/projects/QZP9/Validation/' + 'config_game/tool_setting.yaml')
+            save_yaml(tool_setting_parameters, f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/' + 'config_game/tool_setting.yaml')
 
             # 複製game_setting參數
-            game_setting_parameters = load_yaml('F:/projects/TTZ/Validation/' + 'config_game/game_setting.yaml')
-            save_yaml(game_setting_parameters, f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/' + 'config_game/game_setting.yaml')
+            game_setting_parameters = load_yaml('F:/projects/QZP9/Validation/' + 'config_game/game_setting.yaml')
+            save_yaml(game_setting_parameters, f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/' + 'config_game/game_setting.yaml')
 
             # 複製room_setting參數
-            room_setting_parameters = load_yaml('F:/projects/TTZ/Validation/' + 'config_game/room_setting.yaml')
-            save_yaml(room_setting_parameters, f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/' + 'config_game/room_setting.yaml')
+            room_setting_parameters = load_yaml('F:/projects/QZP9/Validation/' + 'config_game/room_setting.yaml')
+            save_yaml(room_setting_parameters, f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/' + 'config_game/room_setting.yaml')
 
             # 複製tool_setting參數
-            tool_setting_parameters = load_yaml('F:/projects/TTZ/Validation/' + 'config_game/tool_setting.yaml')
-            save_yaml(tool_setting_parameters, f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/' + 'config_game/tool_setting.yaml')
+            tool_setting_parameters = load_yaml('F:/projects/QZP9/Validation/' + 'config_game/tool_setting.yaml')
+            save_yaml(tool_setting_parameters, f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/' + 'config_game/tool_setting.yaml')
             
             # -----------------step 2: 運行驗證工具------------------------ 
-            exe_path = r"F:/projects\TTZ\Validation\validation_tool"
+            exe_path = r"F:\projects\QZP9\Validation\validation_tool"
             result = subprocess.run([exe_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             if result.returncode == 0:
                 print("驗證工具運行成功")
@@ -435,14 +379,14 @@ def single_double_check(log_file_path:str, log_name:str, parameters:dict, order:
                 print("驗證工具運行失敗")
 
             # 複製log
-            # os.makedirs(f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/log', exist_ok=True)
+            # os.makedirs(f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/log', exist_ok=True)
             # silent_copy(
             #     log_file_path + log_name, 
-            #     f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/log/' + log_name
+            #     f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/log/' + log_name
             #     )
             
             # 記錄參數類型
-            with open(f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/para_type.txt', 'w', encoding='utf-8') as file:
+            with open(f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/para_type.txt', 'w', encoding='utf-8') as file:
                 file.write(para_type)
 
             # -----------------step 2: 讀取驗證工具執行結果日志------------------------
@@ -460,26 +404,17 @@ def single_double_check(log_file_path:str, log_name:str, parameters:dict, order:
 
                 # -----------------step 4: 執行 engine------------------------
                 inputs, inter_df, output_factors = generate_test_case(
-                    region_bet=final_solution[:6]*1000, 
-                    monthly_total_bet=final_solution[6],            
-                    monthly_total_pay=final_solution[7],     
-                    cycle_total_bet=final_solution[8],            
-                    cycle_total_pay=final_solution[9],            
-                    daily_total_bet=final_solution[10],            
-                    daily_total_pay=final_solution[11],           
-                    process_type='Random',          
-                    RTPfactor_square=0.06,                 
-                    monthly_RTP_cap_enabled=True if final_solution[13] > 0 else False,     
-                    monthly_RTP_cap=final_solution[14],             
-                    expected_RTP=final_solution[12],                 
-                    monthly_loss_cap_enabled=True if final_solution[15] > 0 else False,     
-                    monthly_loss_cap=final_solution[16],         
-                    daily_loss_cap_enabled=True if final_solution[17] > 0 else False,        
-                    daily_loss_cap=final_solution[18],               
-                    consecutive_above_door=final_solution[19],            
-                    consecutive_heaven_door=final_solution[20],            
-                    consecutive_below_door=final_solution[21],                      
-                    pass_n_turns_distribution=final_solution[22:30]
+                    monthly_total_bet=final_solution[0],            
+                    monthly_total_pay=final_solution[1],     
+                    cycle_total_bet=final_solution[2],            
+                    cycle_total_pay=final_solution[3],                     
+                    is_Rookie_table=True if final_solution[4] > 0 else False,                
+                    monthly_RTP_cap_enabled=True if final_solution[5] > 0 else False,     
+                    monthly_RTP_cap=final_solution[6],             
+                    monthly_loss_cap_enabled=True if final_solution[7] > 0 else False,     
+                    monthly_loss_cap=final_solution[8],         
+                    monthly_player_profit_cap_enabled=True if final_solution[9] > 0 else False,        
+                    monthly_player_profit_cap=final_solution[10],               
                 )
 
                 # -----------------step 5: 比較驗證工具和engine的結果------------------------
@@ -496,16 +431,16 @@ def single_double_check(log_file_path:str, log_name:str, parameters:dict, order:
                 if not comparison_inter.empty:
                     print('【中間因子】')
                     display(inter_df, rtp_data[inter_df.columns])
-                    pd.Series(list(inputs.__dict__.values())[:22], index=list(inputs.__dict__.keys())[:22]).to_csv(f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/inputs.csv')
-                    comparison_inter.to_csv(f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/comparison_inter.csv')
+                    pd.Series(list(inputs.__dict__.values())[:22], index=list(inputs.__dict__.keys())[:22]).to_csv(f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/inputs.csv')
+                    comparison_inter.to_csv(f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/comparison_inter.csv')
                 
                 # 如果權重表不為空，打印權重表
                 if not comparison_weight.empty:
                     print('【權重表】')
                     display(inter_df)
                     display(output_factors, output_factors.astype('float'), df_weight_data[output_factors.columns])
-                    pd.Series(list(inputs.__dict__.values())[:22], index=list(inputs.__dict__.keys())[:22]).to_csv(f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/inputs.csv')
-                    comparison_weight.to_csv(f'F:/projects/TTZ/Validation/config_list/config_{str(order)}_{str(_spl)}/comparison_weight.csv')
+                    pd.Series(list(inputs.__dict__.values())[:22], index=list(inputs.__dict__.keys())[:22]).to_csv(f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/inputs.csv')
+                    comparison_weight.to_csv(f'F:/projects/QZP9/Validation/config_list/config_{str(order)}_{str(_spl)}/comparison_weight.csv')
                     
                 # 顯示比較結果並標紅不同的單元格
                 inter_styled_comparison = comparison_inter.style.apply(highlight_diff, axis=None)
@@ -520,4 +455,4 @@ def single_double_check(log_file_path:str, log_name:str, parameters:dict, order:
 
 
 # if __name__ == "__main__":
-#     single_double_check(r'F:/projects/TTZ/Validation/', 'rtp_test_001.txt')
+#     single_double_check(r'F:/projects/QZP9/Validation/', 'rtp_test_001.txt')
